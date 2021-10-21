@@ -5,12 +5,12 @@ public class WordFilter
 	private String strStartWith;
 	private String strEndWith;
 	private String strContains;
-	private int iContainsidx;
+	private int iContainsidx = -1;
 	private int iLength;
 	
 	public WordFilter()
 	{
-		
+		super();
 	}
 	
 	public String getStrStartWith()

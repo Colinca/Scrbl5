@@ -43,4 +43,8 @@ public class Word implements Comparable<Word> {
 		return Word;
 	}
 
+	public int Length()
+	{
+		return this.getWord().length();
+	}
 }

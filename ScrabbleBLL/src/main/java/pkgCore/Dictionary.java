@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.math3.util.CombinatoricsUtils;
 
@@ -234,7 +235,8 @@ public class Dictionary {
 	 * @return
 	 */
 	
-	public ArrayList<Word> GenerateWords(String strLetters) {
+	public ArrayList<Word> GenerateWords(String strLetters) 
+	{
 		ArrayList<String> combinWords = new ArrayList<String>();
 		for (int b = 1; b < strLetters.length() + 1; b++) {
 			Iterator<int[]> iterCommon = CombinatoricsUtils.combinationsIterator(strLetters.length(), b);
@@ -251,7 +253,15 @@ public class Dictionary {
 		HashSet<Word> hsUniqueWords = new HashSet<Word>(GeneratePossibleWords(combinWords));
 		ArrayList<Word> WordsPermut = new ArrayList<Word>(hsUniqueWords);
 		Collections.sort(WordsPermut, Word.CompWord);
-		return WordsPermut;
+		
+		ArrayList<Word> RealWords = new ArrayList<Word>();
+		for (Word w: WordsPermut)
+		{
+			if (this.findWord(w.getWord()) != null)
+				RealWords.add(w);
+		}
+		
+		return RealWords;
 	}
 
 	/**
@@ -265,6 +275,41 @@ public class Dictionary {
 	 * @param arrLetters
 	 * @return - unique list of Words.
 	 */
+	
+	public ArrayList<Word> GenerateWords (String strLetters, WordFilter WF)
+	{
+		
+		ArrayList<Word> arrGeneratedWords = new ArrayList<Word>();
+
+		
+		if (WF.getiLength() > 0)
+			arrGeneratedWords = (ArrayList<Word>) arrGeneratedWords.stream().filter(x -> x.getWord().length() == WF.getiLength()).collect(Collectors.toList());
+		
+		if (WF.getStrStartWith() != null)
+		{
+			arrGeneratedWords = (ArrayList<Word>) arrGeneratedWords.stream().filter(x -> x.getWord().startsWith(WF.getStrStartWith())).collect(Collectors.toList());
+		}
+		
+		if (WF.getStrEndWith() != null)
+		{
+			
+		}
+		
+		if (WF.getStrContains() != null)
+		{
+			
+		}
+
+		if (WF.getStrContains() != null)
+		{
+			if(WF.getiContainsIdx() == -1)
+				arrGeneratedWords = (ArrayList<Word>) arrGeneratedWords.stream().filter(x -> x.getWord().length() == WF.getiLength()).collect(Collectors.toList());
+			
+			else if (WF.getiContainsIdx() >= 0)
+				arrGeneratedWords = (ArrayList<Word>) arrGeneratedWords.stream().filter(x -> x.getWord().length() == WF.getiLength()).collect(Collectors.toList());
+		}
+	}
+	
 	private ArrayList<Word> GeneratePossibleWords(ArrayList<String> arrLetters) {
 		HashSet<Word> words = new HashSet<Word>();
 
